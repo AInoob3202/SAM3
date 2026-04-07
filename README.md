@@ -1,5 +1,67 @@
 # SAM3
 
+
+# debug
+## decoder的input
+
+SAM3的decoder需要输入两种feature
+- text prompt
+- image feature
+
+QWen的vision encoder处理图片后，进行merger从而提高计算效率降低开销。
+
+之前的bug是提取Post-merger的图像特征，但是这样发现在同样训练参数下loss会升高。
+
+更新：修改成了pre-merger的图像特征。
+
+## 训练过程中loss的计算方式
+### anchorcosineloss
+anchorcosineloss是从某句话的回答中提取出<anchor\_1>位置，查询到HiddenState，去和经过visionEncoder的图像的真实anchor区域pooling
+
+之前的bug是在LLM层中提取anchorfeature，再和<anchor\_1>这一token的hiddenstate对齐（这俩实际上是一个东西），
+
+更新：当backward到anchorloss的时候，读取anchor的mask并且计算anchor区域，在Post-merger后的imagefeature中做这一区域的池化计算，和<anchor_\1>token的Hiddenstate做cosine，目的是让LLM里的<anchor\_1>token 的hiddenstate去靠近视觉区域语义。
+
+[ ]TODO：对比mask的vision feature使用post/pre-merger谁能带来更好的focus和seg效果？
+
+### segloss
+segloss目前的计算公式为：
+
+$$segloss= 2.0*loss_{BCE}+0.5*loss_{Dice}+0.5*loss_{IoU}$$
+
+之前的bug是直接使用了逐像素IoU作为loss，发现不对劲就删除了。
+
+更新：目前的IoUloss是SAM3原生的用于提高mask分割质量的一个loss（非主导loss），这个在SAM3的forward中负责选出多个mask中最佳的那一个
+
+[ ] Ablation：IoUloss是否有用
+
+### boundary loss
+Claude给我推荐：如果分辨率低的话，可以试试boundary loss，可以做一下Ablation
+
+## ZeRo3的切片问题
+ckpt的保存和最终权重保存会崩溃，提示权重为(\[0,\])，后面直接让AI修了也不报错了
+
+
+## 数据集问题
+<target_1>这个token出现的位置太靠前，比如在这一个中：
+
+```json
+"conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nSegment the sink that is to the bottom left of the doorknob."
+      },
+      {
+        "from": "gpt",
+        "reasoning": "I first find the doorknob<anchor_1>, then I look for the sink<target_1> to its bottom left.",
+        "value": "It's sink<target_1>."
+      }
+    ]
+```
+虽然tgt_1确实跟在sink后并且传到decoder中，但是忽视了后续的“to its bottom left”，从而导致自回归的时候就丢失了这一信息，tgt_1的输出实际上是有缺陷的。
+
+
+###
 # pipeline
 ``` markdown
 1 Step 1: Smart Resize
