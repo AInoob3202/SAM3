@@ -2,6 +2,7 @@
 
 # 新设计
 <anchor\_1>到<anchor\_8>特殊token用于标记anchor，让模型学习到anchor特征；<target\_1>用于标记分割目标，提取目标hiddenstate用于分割。
+
 $$loss = w_{text}*TextLoss+ w_{anchor}*AnchorCosineLoss + w_{seg}*TargetSegLoss(BCE+Dice+IoU)$$
 
 # 在refcoco上进行Train和eval
@@ -49,4 +50,4 @@ $$loss = w_{text}*TextLoss+ w_{anchor}*AnchorCosineLoss + w_{seg}*TargetSegLoss(
 ```
 mask通过\[DatasetName:ID\]映射查询
 
-这个样例数据过于简单，
+这个样例数据过于简单，还需增强
