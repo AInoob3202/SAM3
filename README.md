@@ -3,7 +3,7 @@
 
 # 下一步的ablation
 
-- [ ] loss：目前以BCE+Dice主导（weight还得调整），尝试boundary loss/是否需要IoUloss
+- [ ] loss：目前以BCE+Dice主导（weight还得调整），尝试boundary loss
 - [ ] anchorloss的pre-merger和post-merger
 
 # debug
@@ -38,7 +38,7 @@ $$segloss= 2.0*loss_{BCE}+0.5*loss_{Dice}+0.5*loss_{IoU}$$
 
 更新：目前的IoUloss是SAM3原生的用于提高mask分割质量的一个loss（非主导loss），这个在SAM3的forward中负责选出多个mask中最佳的那一个
 
-- [ ] Ablation：IoUloss是否有用
+- [x] Ablation：IoUloss是否有用 没有用
 
 ### boundary loss
 Claude给我推荐：如果分辨率低的话，可以试试boundary loss，可以做一下Ablation
