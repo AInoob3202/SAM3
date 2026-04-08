@@ -2,13 +2,9 @@
 
 
 # 下一步的ablation
-- [ ] Projector：目前是一个矩阵，直接投影到256维，相比SAM3的下采样过于简单，下一步尝试使用SAM3相似的结构：
-<img width="780" height="166" alt="image" src="https://github.com/user-attachments/assets/4755db08-3040-494d-baf2-aac091ccbe5f" />
-<img width="1011" height="179" alt="image" src="https://github.com/user-attachments/assets/9bbcb506-f53d-4b91-8866-8b8068fa2803" />
 
 - [ ] loss：目前以BCE+Dice主导（weight还得调整），尝试boundary loss/是否需要IoUloss
 - [ ] anchorloss的pre-merger和post-merger
-- [ ]
 
 # debug
 ## decoder的input
