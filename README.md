@@ -1,6 +1,13 @@
 # SAM3
 
 
+# 4.8工作
+
+编译好了flash-Attention，训练时间缩短三分之一
+
+claude推荐使用一个pixel shuffle，ablation看一下效果。
+
+
 # 下一步的ablation
 
 - [ ] loss：目前以BCE+Dice主导（weight还得调整），尝试boundary loss
