@@ -4,7 +4,8 @@
 # 4.9
 
 - [ ] 混合ade20k||cocostuff||mapillary||paco_lvis||pascal_part||refcoco||refcocog||refcoco+一共360000条进行3个epoch训练，
-昨天的pixel shuffle全部初始化为0，claude说因为只经过一个epoch训练，没有起到太大作用。
+      
+昨天的pixel shuffle第一次随机初始化导致eval崩溃，后面改成初始化为0，claude说因为只经过一个epoch训练，没有起到太大作用。
 
 config：上调image_min_pixels（256->512）。
 昨天使用240000条ade20k||cocostuff||mapillary||paco_lvis||pascal_part数据混合训练一个epoch，giou提升0.06，ciou提升0.2（相对resize mask+只在refcoco上训）。
