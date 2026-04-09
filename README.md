@@ -2,7 +2,7 @@
 
 
 # 4.9
-
+- [ ] ablation pixel shuffle（大约多了7m参数，不确定性价比）
 - [ ] 混合ade20k||cocostuff||mapillary||paco_lvis||pascal_part||refcoco||refcocog||refcoco+一共360000条进行3个epoch训练，
       
 昨天的pixel shuffle第一次随机初始化导致eval崩溃，后面改成初始化为0，claude说因为只经过一个epoch训练，没有起到太大作用。
