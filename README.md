@@ -20,7 +20,7 @@ config：上调image_min_pixels（256->512）。
 
 编译好了flash-Attention，训练时间缩短三分之一
 
-claude推荐使用一个pixel shuffle，ablation看一下效果。这个是走SAM3内部自带的high_res_features，从visionEncoder提取特征。
+claude推荐使用一个pixel shuffle，ablation看一下效果。这个是走SAM3内部自带的high_res_features，从visionEncoder上采样提取特征（上采样地很猛）。
 ```markdown
  MaskDecoder内部：
   image_embedding + sparse_prompt → TwoWayTransformer交叉注意力
