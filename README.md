@@ -2,9 +2,12 @@
 
 
 # 4.9
+
+- [ ] 混合ade20k||cocostuff||mapillary||paco_lvis||pascal_part||refcoco||refcocog||refcoco+一共360000条进行3个epoch训练，
 昨天的pixel shuffle全部初始化为0，claude说因为只经过一个epoch训练，没有起到太大作用。
 
-昨天使用240000条ade20k||cocostuff||mapillary||paco_lvis||pascal_part数据混合训练一个epoch，giou提升0.06，ciou提升0.2（相对resize mask+只在refcoco上训）
+config：上调image_min_pixels（256->512）。
+昨天使用240000条ade20k||cocostuff||mapillary||paco_lvis||pascal_part数据混合训练一个epoch，giou提升0.06，ciou提升0.2（相对resize mask+只在refcoco上训）。
 
 ![00006](https://github.com/user-attachments/assets/773c6206-f03a-472b-a7c7-c364e51906de)
 ![000061](https://github.com/user-attachments/assets/7314a8da-f107-474d-aa78-801f01368c9f)
@@ -16,12 +19,19 @@
 
 编译好了flash-Attention，训练时间缩短三分之一
 
-claude推荐使用一个pixel shuffle，ablation看一下效果。
-
+claude推荐使用一个pixel shuffle，ablation看一下效果。这个是走SAM3内部自带的high_res_features，从visionEncoder提取特征。
+```markdown
+ MaskDecoder内部：
+  image_embedding + sparse_prompt → TwoWayTransformer交叉注意力
+      → ConvTranspose2d 4x上采样
+      → + high_res_features (这里才和PixelShuffle的输出相加)
+      → mask预测
+```
+- 4.9 暂时先不ablation，增加数据规模增加训练轮数看看能否合格。
 
 # 下一步的ablation
 
-- [ ] loss：目前以BCE+Dice主导（weight还得调整），尝试boundary loss
+- [ ] loss：尝试boundary loss
 - [ ] anchorloss的pre-merger和post-merger
 
 # debug
